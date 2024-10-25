@@ -12,8 +12,14 @@ to start.
 
 Please note that overlapping segments of spectra are merged through linear interpolation and weighted means determined via reported uncertainty.
 
+Required Packages:
+- pandas
+- numpy
+- matplotlib
+
 To Do:
 - Expand capabilities to enable different file formats, such as differently labeled columns, or even the actual .fits files.
 - Allow for zero values of uncertainties.
+- Convert to an actual Python package, as opposed to a piece of raw source code to be run via python command.
 
 Inspired by CoAdd.pro by Xinfeng Xu.
