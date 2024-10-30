@@ -45,7 +45,7 @@ class Spectrum:
         mean_spectrum.next = next_next
         return mean_spectrum
 
-    def stitch(self,is_overlap=False):
+    def stitch(self,is_overlap=False,is_grating_mean=False):
         fig, ax = plt.subplots()
         ax.plot(self.wave, self.flux)
 
@@ -54,6 +54,9 @@ class Spectrum:
             print("This linked list is done!")
             return self
         #print(self.next.wave)
+        if is_grating_mean:
+            overlap_mean = self.overlap_mean()
+            return overlap_mean.stitch(is_overlap=True,is_grating_mean=True)
         fig,ax = plt.subplots()
         ax.plot(self.wave, self.flux)
         ax.plot(self.next.wave, self.next.flux)
@@ -218,8 +221,10 @@ print(directory_name)
 same_grating = input("Are the spectra all of the same grating? (y/n)")
 if same_grating=='y' or same_grating=='Y':
     overlap = True
+    grating_mean = True
 else:
     overlap = False
+    grating_mean = True
 
 spectra = None
 spectrum_current = None
@@ -235,6 +240,6 @@ for root, dirs, files in os.walk(directory_name):
                 spectrum_current.next = Spectrum(df)
                 spectrum_current = spectrum_current.next
 
-stitched_spectrum = spectra.stitch(overlap)
+stitched_spectrum = spectra.stitch(is_overlap=overlap,is_grating_mean=grating_mean)
 final_df = pd.DataFrame({'wave':stitched_spectrum.wave,'flux':stitched_spectrum.flux,'error':stitched_spectrum.error})
 final_df.to_csv(directory_name+'/stitched_spectrum.txt', sep='\t',index=False)
