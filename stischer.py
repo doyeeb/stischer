@@ -215,6 +215,12 @@ print("In the file selection dialog, make sure you're *in* the folder that conta
 print("Simply selecting the folder may not work.")
 directory_name = filedialog.askdirectory()
 print(directory_name)
+same_grating = input("Are the spectra all of the same grating? (y/n)")
+if same_grating=='y' or same_grating=='Y':
+    overlap = True
+else:
+    overlap = False
+
 spectra = None
 spectrum_current = None
 for root, dirs, files in os.walk(directory_name):
@@ -229,6 +235,6 @@ for root, dirs, files in os.walk(directory_name):
                 spectrum_current.next = Spectrum(df)
                 spectrum_current = spectrum_current.next
 
-stitched_spectrum = spectra.stitch()
+stitched_spectrum = spectra.stitch(overlap)
 final_df = pd.DataFrame({'wave':stitched_spectrum.wave,'flux':stitched_spectrum.flux,'error':stitched_spectrum.error})
 final_df.to_csv(directory_name+'/stitched_spectrum.txt', sep='\t',index=False)
